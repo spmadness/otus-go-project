@@ -13,9 +13,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
@@ -27,14 +24,11 @@ jobs:
       - name: Linters
         uses: golangci/golangci-lint-action@v3
         with:
-          working-directory: ${{ env.BRANCH }}
+          working-directory: ${{ github.workspace }}
 
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
-        run: echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
@@ -45,7 +39,7 @@ jobs:
 
       - name: Unit tests
         run: go test -race -count 100 ./...
-        working-directory: ${{ env.BRANCH }}
+        working-directory: ${{ github.workspace }}
 
   test_makefile_build:
     runs-on: ubuntu-latest
