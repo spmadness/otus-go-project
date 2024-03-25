@@ -2,8 +2,9 @@ package main
 
 import (
 	"flag"
-	"github.com/spmadness/otus-go-project/internal/client"
 	"log"
+
+	"github.com/spmadness/otus-go-project/internal/client"
 )
 
 var (
@@ -24,7 +25,7 @@ func init() {
 
 func main() {
 	flag.Parse()
-
+	log.Println("starting client...")
 	c := client.NewClient(host, port, client.OutputTable)
 
 	err := c.Connect()

@@ -27,7 +27,7 @@ run-daemon: build-daemon
 	$(BIN_DAEMON) -config ./config/config_daemon.toml
 
 run-client: build-client
-	$(BIN_CLIENT) -N 1 -M 5 -type 1
+	$(BIN_CLIENT) -N 1 -M 5 -type 0
 
 build-img-daemon:
 	docker build \

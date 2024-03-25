@@ -5,6 +5,15 @@ linters-settings:
   funlen:
     lines: 150
     statements: 80
+  depguard:
+    rules:
+      Main:
+        allow:
+          - $gostd
+          - github.com/stretchr/testify
+          - github.com/spmadness/otus-go-project
+          - github.com/jedib0t/go-pretty/v6/table
+          - github.com/spf13/viper
 
 linters:
   disable-all: true
