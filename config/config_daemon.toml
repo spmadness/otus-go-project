@@ -1,6 +1,3 @@
 [metrics]
 system = true
 cpu = true
-disk = true
-netTopTalkers = false
-netStats = false

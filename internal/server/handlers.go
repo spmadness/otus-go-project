@@ -1,7 +1,7 @@
 package server
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	"github.com/spmadness/otus-go-project/internal/scraper"
@@ -9,7 +9,8 @@ import (
 )
 
 func (s *Server) GetMetrics(request *pb.Request, server pb.MonitoringService_GetMetricsServer) error {
-	fmt.Println("new grpc connection")
+	log.Println("new grpc connection")
+	defer log.Println("closing grpc connection...")
 
 	scr, err := s.app.Scraper(scraper.MetricType(request.GetType()))
 	if err != nil {
@@ -36,7 +37,6 @@ func (s *Server) GetMetrics(request *pb.Request, server pb.MonitoringService_Get
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("closing grpc connection...")
 			ticker.Stop()
 			return nil
 
@@ -50,7 +50,7 @@ func (s *Server) GetMetrics(request *pb.Request, server pb.MonitoringService_Get
 }
 
 func sendSnapshot(seconds int64, scraper scraper.Scraper, server pb.MonitoringService_GetMetricsServer) error {
-	fmt.Println("sending data...")
+	log.Println("sending data...")
 	data, err := scraper.GetSnapshot(seconds)
 	if err != nil {
 		return err

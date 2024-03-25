@@ -3,12 +3,11 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"github.com/spmadness/otus-go-project/internal/app"
 	"github.com/spmadness/otus-go-project/internal/scraper"
 	"github.com/spmadness/otus-go-project/internal/server"
 )
@@ -31,17 +30,16 @@ func main() {
 	scrapers := scraper.NewCollection(
 		config.Metrics.LoadAverageSystem,
 		config.Metrics.LoadAverageCPU,
-		config.Metrics.LoadDisks,
 	)
 
 	if len(scrapers) == 0 {
-		fmt.Println("no scrapers are specified in config")
+		log.Println("no scrapers are enabled in config")
 		os.Exit(1)
 	}
 
-	fmt.Println("starting monitoring daemon...")
+	log.Println("starting monitoring daemon...")
 
-	service := app.New(scrapers)
+	service := scraper.New(scrapers)
 
 	ctx, cancel := signal.NotifyContext(context.Background(),
 		syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)

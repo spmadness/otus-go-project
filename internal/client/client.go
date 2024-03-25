@@ -8,10 +8,9 @@ import (
 	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/spmadness/otus-go-project/internal/server/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-
-	"github.com/spmadness/otus-go-project/internal/server/pb"
 )
 
 type OutputMode int
@@ -95,7 +94,7 @@ func (c *Client) readData(stream pb.MonitoringService_GetMetricsClient) error {
 			c.drawTable(data)
 		}
 		if c.mode == OutputRaw {
-			fmt.Println(response.Data)
+			log.Println(response.Data)
 		}
 	}
 }

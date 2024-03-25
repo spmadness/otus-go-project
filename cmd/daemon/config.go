@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -15,9 +15,6 @@ type Config struct {
 type MetricsConf struct {
 	LoadAverageSystem bool `mapstructure:"system"`
 	LoadAverageCPU    bool `mapstructure:"cpu"`
-	LoadDisks         bool `mapstructure:"disk"`
-	NetTopTalkers     bool `mapstructure:"netTopTalkers"`
-	NetStatistics     bool `mapstructure:"netStats"`
 }
 
 func NewConfig(configFile string) Config {
@@ -28,13 +25,13 @@ func NewConfig(configFile string) Config {
 	viper.SetConfigFile(configFile)
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Printf("config read error: %s", err)
+		log.Printf("config read error: %s", err)
 		os.Exit(1)
 	}
 
 	err = viper.Unmarshal(&config)
 	if err != nil {
-		fmt.Printf("config unmarshal error: %s", err)
+		log.Printf("config unmarshal error: %s", err)
 		os.Exit(1)
 	}
 

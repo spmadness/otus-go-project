@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net"
 
 	"github.com/spmadness/otus-go-project/internal/scraper"
 	"github.com/spmadness/otus-go-project/internal/server/pb"
-
 	"google.golang.org/grpc"
 )
 
@@ -33,20 +33,20 @@ func NewServer(app Application, port int) *Server {
 func (s *Server) Start() {
 	lsn, err := net.Listen("tcp", fmt.Sprintf(":%d", s.port))
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 
 	s.server = grpc.NewServer()
 	pb.RegisterMonitoringServiceServer(s.server, s)
 
-	fmt.Printf("starting grpc server on %s \n", lsn.Addr().String())
+	log.Printf("starting grpc server on %s \n", lsn.Addr().String())
 
 	if err = s.server.Serve(lsn); err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 }
 
 func (s *Server) Stop() {
-	fmt.Println("stopping grpc server...")
+	log.Println("stopping grpc server...")
 	s.server.Stop()
 }
