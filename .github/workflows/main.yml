@@ -52,6 +52,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: make build-daemon
-        run: make build-daemon
+      - name: make build-daemon-linux
+        run: make build-daemon-linux
         working-directory: .

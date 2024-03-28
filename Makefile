@@ -1,5 +1,8 @@
-BIN_DAEMON := "./bin/daemon"
-BIN_CLIENT := "./bin/client"
+BIN_DAEMON_LINUX := "./bin/linux/daemon"
+BIN_CLIENT_LINUX := "./bin/linux/client"
+
+BIN_DAEMON_FREEBSD := "./bin/freebsd/daemon"
+BIN_CLIENT_FREEBSD := "./bin/freebsd/client"
 
 DOCKER_IMG_DAEMON := "daemon:develop"
 DOCKER_CONTAINER_DAEMON := "daemon"
@@ -17,17 +20,23 @@ generate:
 		--go-grpc_out=internal/server/pb \
 		api/*.proto
 
-build-daemon:
-	go build -v -o $(BIN_DAEMON) -ldflags "$(LDFLAGS)" ./cmd/daemon
+build-daemon-linux:
+	go build -v -o $(BIN_DAEMON_LINUX) -ldflags "$(LDFLAGS)" ./cmd/daemon
 
-build-client:
-	go build -v -o $(BIN_CLIENT) -ldflags "$(LDFLAGS)" ./cmd/client
+build-client-linux:
+	go build -v -o $(BIN_CLIENT_LINUX) -ldflags "$(LDFLAGS)" ./cmd/client
 
-run-daemon: build-daemon
-	$(BIN_DAEMON) -config ./config/config_daemon.toml
+build-daemon-freebsd:
+	GOOS=freebsd go build -v -o $(BIN_DAEMON_FREEBSD) -ldflags "$(LDFLAGS)" ./cmd/daemon
 
-run-client: build-client
-	$(BIN_CLIENT) -N 1 -M 5 -type 0
+build-client-freebsd:
+	GOOS=freebsd go build -v -o $(BIN_CLIENT_FREEBSD) -ldflags "$(LDFLAGS)" ./cmd/client
+
+run-daemon-linux: build-daemon-linux
+	$(BIN_DAEMON_LINUX) -config ./config/config_daemon.toml
+
+run-client-linux: build-client-linux
+	$(BIN_CLIENT_LINUX) -N 1 -M 5 -type 0
 
 build-img-daemon:
 	docker build \
@@ -35,10 +44,10 @@ build-img-daemon:
 		-t $(DOCKER_IMG_DAEMON) \
 		-f build/Dockerfile .
 
+
 run-img-daemon:
 		docker run -d --name $(DOCKER_CONTAINER_DAEMON) \
     	-p 50051:50051 $(DOCKER_IMG_DAEMON)
-
 
 install-lint-deps:
 	(which golangci-lint > /dev/null) || curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin v1.55.2
