@@ -16,8 +16,8 @@ var (
 )
 
 func init() {
-	flag.Int64Var(&M, "M", 1, "amount of seconds for stats fetch interval")
-	flag.Int64Var(&N, "N", 5, "amount of seconds to use for average values")
+	flag.Int64Var(&N, "N", 1, "amount of seconds for stats fetch interval")
+	flag.Int64Var(&M, "M", 5, "amount of seconds to use for average values")
 	flag.Int64Var(&Type, "type", 0, "type of stats to get")
 	flag.StringVar(&host, "host", "localhost", "server host")
 	flag.Int64Var(&port, "port", 50051, "server port")
